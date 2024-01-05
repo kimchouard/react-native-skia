@@ -48,7 +48,9 @@ To use React Native Skia on [snack](https://snack.expo.dev/), you will need to u
 
 To use React Native Skia with Remotion, please follow [the following installation steps](https://remotion.dev/skia).
 
-## Manual Webpack Installation
+## Manual Installation
+
+### Webpack
 
 To run React Native Skia on Web, you need to do three things:
 
@@ -111,12 +113,40 @@ const newConfiguration = {
 
 Last, you need to [load Skia](#loading-skia).
 
+### Metro
+
+The steps listed for Webpack holds true for Metro. The way you would resolve `fs` and `path` though is different.
+
+Add this JS script to your `postinstall` routine, in order to avoid canvaskit throwing an error:
+```js
+// To be added in package.json "postinstall": "(...) && node [name-of-this-file].js"
+const fs = require('fs');
+const path = require('path');
+
+const packageJsonDirectPath = path.join(__dirname, 'node_modules', /* '@shopify', 'react-native-skia', 'node_modules', */ 'canvaskit-wasm', 'package.json');
+// eslint-disable-next-line import/no-dynamic-require
+const packageJsonDirect = require(packageJsonDirectPath);
+packageJsonDirect.browser = {
+  fs: false,
+  path: false,
+  os: false,
+};
+
+fs.writeFileSync(packageJsonDirectPath, JSON.stringify(packageJsonDirect, null, 2));
+```
+
 ## Loading Skia
 
 You need to have Skia fully loaded and initialized before importing the Skia module.
 There are two ways you can control the way Skia should load:
 * With `<WithSkiaWeb />`: using code-splitting to defer loading the components that import Skia.
 * With `LoadSkiaWeb()`: deferring the root component registration until Skia is loaded.
+
+:::info
+
+If you're using [Expo Router](https://docs.expo.dev/router/introduction/), you can not defer the root component registration, so you'd have to use the [code-splitting](#using-code-splitting).
+
+:::
 
 ### Using Code-Splitting
 
