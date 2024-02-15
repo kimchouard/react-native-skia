@@ -51,10 +51,10 @@ const sidebars = {
         "shapes/path",
         "shapes/polygons",
         "shapes/ellipses",
+        "shapes/atlas",
         "shapes/vertices",
         "shapes/patch",
         "shapes/pictures",
-        "shapes/custom-drawing",
       ],
     },
     {
@@ -68,7 +68,6 @@ const sidebars = {
       type: "category",
       label: "Text",
       items: [
-        "text/fonts",
         "text/paragraph",
         "text/text",
         "text/glyphs",
